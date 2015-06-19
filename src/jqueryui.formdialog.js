@@ -17,10 +17,10 @@
         try {
             var data = $.parseJSON(jqXHR.responseText);
             $.each(data.form, function (field, errors) {
-                $('*[name="'+field+'"]:first').prepend(_createErrorList(errors));
-            });
+                this.find('*[name="'+field+'"]:first').before(_createErrorList(errors));
+            }.bind(this));
             if (data.error) {
-                this.find('form').prepend(_createErrorList([data.error]));
+                this.find('form').addBack('form').prepend(_createErrorList([data.error]));
             }
         }
         catch (e) {
@@ -62,7 +62,10 @@
             click: function (evt) {
                 var button  = evt.target; // the 'Save' button
                 var $dialog = $(this);
-                var $form   = $dialog.find('form');
+                var $form   = $dialog.find('form').addBack('form');
+                if ($form.find(':invalid').length > 0) {
+                    return false;
+                }
 
                 button.disabled = true;
                 $dialog.find('ul.error').remove();
