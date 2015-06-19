@@ -106,8 +106,16 @@
             }
         }];
 
-        // dialog() is a widget itself, so there’s no need to use each()
-        return this.dialog(setting);
+        return this.each(function () {
+            var $elem    = $(this);
+            var autoconf = $elem.data();
+            if (autoconf) {
+                $elem.dialog($.extend({}, setting, autoconf));
+            }
+            else {
+                $elem.dialog(setting);
+            }
+        });
     };
 
     // global defaults
