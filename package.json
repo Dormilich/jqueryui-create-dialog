@@ -1,6 +1,21 @@
 {
-  "name": "jquery-plugin",
-  "version": "0.0.0-ignored",
+  "name": "form-dialog",
+  "version": "0.1.0",
+  "description": "Create preconfigured jQueryUI dialog forms.",
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "bugs": "https://github.com/Dormilich/jqueryui-form-dialog/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Bertold von Dormilich",
+    "email": "Dormilich@netscape.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Dormilich/jqueryui-form-dialog.git"
+  },
   "engines": {
     "node": ">= 0.8.0"
   },
