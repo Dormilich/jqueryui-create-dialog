@@ -25,6 +25,13 @@ module.exports = function(grunt) {
         dest: 'dist/jquery.<%= pkg.name %>.js'
       },
     },
+    connect: {
+      server: {
+        options: {
+          port: 8088
+        }
+      }
+    },
     uglify: {
       options: {
         banner: '<%= banner %>'
@@ -35,7 +42,9 @@ module.exports = function(grunt) {
       },
     },
     qunit: {
-      files: ['test/**/*.html']
+      // @see http://markdalgleish.com/2013/01/testing-jquery-plugins-cross-version-with-grunt/
+      // for running tests with different jquery/jquery-ui versions
+      files: ['test/*.html']
     },
     jshint: {
       options: {
@@ -74,8 +83,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  //grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
-
+  grunt.registerTask('test', [/* 'connect' */, 'jshint', 'qunit']);
 };
