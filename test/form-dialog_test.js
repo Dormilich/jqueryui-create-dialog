@@ -20,7 +20,7 @@
       throws(block, [expected], [message])
   */
 
-  module('jQuery#form_dialog', {
+  module('formDialog: basics', {
     // This will run before each test in this module.
     setup: function() {
       this.elems = $('#qunit-fixture').children();
@@ -30,33 +30,18 @@
   test('is chainable', function() {
     expect(1);
     // Not a bad test to run on collection methods.
-    strictEqual(this.elems.form_dialog(), this.elems, 'should be chainable');
+    strictEqual(this.elems.formDialog(), this.elems, 'should be chainable');
   });
 
-  test('is awesome', function() {
+  module('formDialog: buttons');
+
+  test('number of buttons', function () {
     expect(1);
-    strictEqual(this.elems.form_dialog().text(), 'awesome0awesome1awesome2', 'should be awesome');
-  });
 
-  module('jQuery.form_dialog');
+    var element = $('<div></div>').formDialog(),
+        btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
 
-  test('is awesome', function() {
-    expect(2);
-    strictEqual($.form_dialog(), 'awesome.', 'should be awesome');
-    strictEqual($.form_dialog({punctuation: '!'}), 'awesome!', 'should be thoroughly awesome');
-  });
-
-  module(':form_dialog selector', {
-    // This will run before each test in this module.
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
-  });
-
-  test('is awesome', function() {
-    expect(1);
-    // Use deepEqual & .get() when comparing jQuery objects.
-    deepEqual(this.elems.filter(':form_dialog').get(), this.elems.last().get(), 'knows awesome when it sees it');
+    equal(btn.length, 2, 'number of buttons');
   });
 
 }(jQuery));

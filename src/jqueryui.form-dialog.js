@@ -25,7 +25,7 @@
         }
         catch (e) {
             // e.g. simple or empty strings
-            console.log(e.message);
+            // console.log(e.message);
         }
     }
 
@@ -47,14 +47,14 @@
      * @param (function) success [optional] jQuery AJAX success handler
      * @return jQuery
      */
-    $.fn.createDialog = function (options, success) {
+    $.fn.formDialog = function (options, success) {
         if (typeof options === 'function') {
             success = options;
         }
         if (typeof options !== 'object') { // null is ignored in $.extend()
             options = {};
         }
-        var plugin  = $.fn.createDialog;
+        var plugin  = $.fn.formDialog;
         var setting = $.extend({}, plugin.defaults, options);
 
         setting.buttons = [{
@@ -111,7 +111,7 @@
     };
 
     // global defaults
-    $.fn.createDialog.defaults = {
+    $.fn.formDialog.defaults = {
         // dialog options:
 
         autoOpen: false,
@@ -128,7 +128,7 @@
         autoClose: true
     };
 
-    $.fn.createDialog.dictionary = {
+    $.fn.formDialog.dictionary = {
         de: {
             Cancel: 'Abbrechen',
             Delete: 'Löschen',
@@ -138,11 +138,11 @@
         }
     };
 
-    $.fn.createDialog.translate = function (language, key) {
-        if (!(language in $.fn.createDialog.dictionary)) {
+    $.fn.formDialog.translate = function (language, key) {
+        if (!(language in $.fn.formDialog.dictionary)) {
             return key;
         }
-        var dictionary = $.fn.createDialog.dictionary[language];
+        var dictionary = $.fn.formDialog.dictionary[language];
         if (key in dictionary) {
             return dictionary[key];
         }

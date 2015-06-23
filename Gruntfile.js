@@ -42,10 +42,19 @@ module.exports = function(grunt) {
       },
     },
     qunit: {
+      all: {
+        options: {
+          urls: [
+            'http://localhost:<%= connect.server.options.port %>/test/form-dialog.html'
+          ]
+        }
+      }
+    },
+/*    qunit: {
       // @see http://markdalgleish.com/2013/01/testing-jquery-plugins-cross-version-with-grunt/
       // for running tests with different jquery/jquery-ui versions
       files: ['test/*.html']
-    },
+    },//*/
     jshint: {
       options: {
         jshintrc: true
@@ -83,9 +92,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  //grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
-  grunt.registerTask('test', [/* 'connect' */, 'jshint', 'qunit']);
+  grunt.registerTask('test',    ['connect', 'jshint', 'qunit']);
 };
