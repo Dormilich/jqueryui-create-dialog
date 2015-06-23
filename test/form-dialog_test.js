@@ -35,13 +35,15 @@
 
   module('formDialog: buttons');
 
-  test('number of buttons', function () {
-    expect(1);
+  test('button properties', function () {
+    expect(3);
 
     var element = $('<div></div>').formDialog(),
         btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
 
     equal(btn.length, 2, 'number of buttons');
+    equal(btn.eq(0).text(), 'Save');
+    equal(btn.eq(1).text(), 'Cancel');
   });
 
 }(jQuery));
