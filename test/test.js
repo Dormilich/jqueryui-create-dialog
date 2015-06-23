@@ -65,4 +65,36 @@
         assert.equal(btn.eq(1).text(), 'Abbrechen', 'translated text of cancel button');
     });
 
+    QUnit.module('formDialog: AJAX', {
+        beforeEach: function () {
+            $.mockjax({
+                url: /\/ajax\/success$/,
+                responseText: 'success'
+            });
+        },
+        afterEach: function () {
+            $.mockjax.clear();
+        }
+    });
+
+    QUnit.test('wrapped form', function (assert) {
+        var done = assert.async();
+
+        var element = $('#form-wrapped').formDialog(function (text) {
+            assert.equal(text, 'success', 'successful response');
+            done();
+        });
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+    });
+
+    QUnit.test('unwrapped form', function (assert) {
+        var done = assert.async();
+
+        var element = $('#form-self').formDialog(function (text) {
+            assert.equal(text, 'success', 'successful response');
+            done();
+        });
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+    });
+
 }(jQuery));
