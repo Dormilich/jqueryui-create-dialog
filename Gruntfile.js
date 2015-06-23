@@ -21,8 +21,8 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       dist: {
-        src: ['src/jquery.<%= pkg.name %>.js'],
-        dest: 'dist/jquery.<%= pkg.name %>.js'
+        src: ['src/jqueryui.<%= pkg.name %>.js'],
+        dest: 'dist/jqueryui.<%= pkg.name %>.js'
       },
     },
     connect: {
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: '<%= concat.dist.dest %>',
-        dest: 'dist/jquery.<%= pkg.name %>.min.js'
+        dest: 'dist/jqueryui.<%= pkg.name %>.min.js'
       },
     },
     qunit: {
