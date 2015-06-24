@@ -1,4 +1,4 @@
-(function($) {
+(function($, window) {
   /*
     ======== A Handy Little QUnit Reference ========
     http://api.qunitjs.com/
@@ -117,21 +117,22 @@
         assert.expect(4);
 
         var element = $('#form-500').formDialog();
-        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
 
-        window.setTimeout(function () {
+        $(window.document).ajaxComplete(function () {
             var popup = $('.ui-dialog pre');
             assert.strictEqual(element.dialog('isOpen'), false, 'form dialog closed');
             assert.strictEqual(popup.length, 1, 'error popup created');
-            assert.equal(popup.text(), 'internal server error', 'using correct error message');
+            assert.strictEqual(popup.text(), 'internal server error', 'using correct error message');
 
             popup.dialog('close');
             assert.strictEqual($('pre').length, 0, 'error popup removed');
 
             done();
-        }, 200);
+        });
+
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
 
     //$.mockjax.clear();
 
-}(jQuery));
+}(jQuery, window));
