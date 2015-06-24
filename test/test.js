@@ -43,6 +43,10 @@
         responseText: 'internal server error'
     });
 
+    QUnit.done(function () {
+        $.mockjax.clear();
+    });
+
     QUnit.module('formDialog: basics', {
         // This will run before each test in this module.
         setup: function() {
@@ -132,7 +136,5 @@
 
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
-
-    //$.mockjax.clear();
 
 }(jQuery, window));
