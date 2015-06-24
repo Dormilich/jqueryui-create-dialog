@@ -1,12 +1,10 @@
 (function ($) {
     function _userAlert(title, text)
     {
-        $('<div/>').append(
-            $('<pre/>').html(text)
-        ).dialog({
+        $('<pre/>').text(text).dialog({
             title: title,
             close: function () {
-                $(this).closest('.ui-dialog').remove();
+                $(this).dialog('destroy');
             }
         });
     }

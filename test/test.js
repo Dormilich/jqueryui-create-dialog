@@ -20,6 +20,29 @@
       throws(block, [expected], [message])
   */
 
+    $.mockjax({
+        url: /\/ajax\/success$/,
+        responseTime: 50,
+        responseText: 'success'
+    });
+    $.mockjax({
+        url: /\/ajax\/error\/400$/,
+        status: 400,
+        responseTime: 50,
+        responseText: {
+            error: ['operation cancelled'],
+            form: {
+                test: ['invalid value']
+            }
+        }
+    });
+    $.mockjax({
+        url: /\/ajax\/error\/500$/,
+        status: 500,
+        responseTime: 50,
+        responseText: 'internal server error'
+    });
+
     QUnit.module('formDialog: basics', {
         // This will run before each test in this module.
         setup: function() {
@@ -65,20 +88,11 @@
         assert.equal(btn.eq(1).text(), 'Abbrechen', 'translated text of cancel button');
     });
 
-    QUnit.module('formDialog: AJAX', {
-        beforeEach: function () {
-            $.mockjax({
-                url: /\/ajax\/success$/,
-                responseText: 'success'
-            });
-        },
-        afterEach: function () {
-            $.mockjax.clear();
-        }
-    });
+    QUnit.module('formDialog: AJAX');
 
     QUnit.test('wrapped form', function (assert) {
         var done = assert.async();
+        assert.expect(1);
 
         var element = $('#form-wrapped').formDialog(function (text) {
             assert.equal(text, 'success', 'successful response');
@@ -89,6 +103,7 @@
 
     QUnit.test('unwrapped form', function (assert) {
         var done = assert.async();
+        assert.expect(1);
 
         var element = $('#form-self').formDialog(function (text) {
             assert.equal(text, 'success', 'successful response');
@@ -96,5 +111,27 @@
         });
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
+
+    QUnit.test('server error', function (assert) {
+        var done = assert.async();
+        assert.expect(4);
+
+        var element = $('#form-500').formDialog();
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+
+        window.setTimeout(function () {
+            var popup = $('.ui-dialog pre');
+            assert.strictEqual(element.dialog('isOpen'), false, 'form dialog closed');
+            assert.strictEqual(popup.length, 1, 'error popup created');
+            assert.equal(popup.text(), 'internal server error', 'using correct error message');
+
+            popup.dialog('close');
+            assert.strictEqual($('pre').length, 0, 'error popup removed');
+
+            done();
+        }, 200);
+    });
+
+    //$.mockjax.clear();
 
 }(jQuery));

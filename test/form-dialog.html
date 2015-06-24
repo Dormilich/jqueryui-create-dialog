@@ -26,6 +26,12 @@
     <form action="/ajax/success" method="get" id="form-self">
       <input type="text" name="test" value="2">
     </form>
+    <form action="/ajax/error/400" method="post" id="form-400">
+      <input type="text" name="test" value="3">
+    </form>
+    <form action="/ajax/error/500" method="post" id="form-500">
+      <input type="text" name="test" value="4">
+    </form>
   </div>
   <script src="test.js"></script>
   <!-- Removing access to jQuery and $. But it'll still be available as _$, if
