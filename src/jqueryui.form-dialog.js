@@ -46,7 +46,7 @@
      * @return jQuery
      */
     $.fn.formDialog = function (options, success) {
-        if (typeof options === 'function') {
+        if ($.isFunction(options)) {
             success = options;
         }
         if (typeof options !== 'object') { // null is ignored in $.extend()
@@ -89,11 +89,11 @@
                     });
                 }
 
-                if (typeof success === 'function') {
+                if ($.isFunction(success)) {
                     ajax.done(success);
                 }
 
-                if (typeof setting.success === 'function') {
+                if ($.isFunction(setting.success)) {
                     ajax.done(setting.success);
                 }
             }
