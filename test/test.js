@@ -20,27 +20,29 @@
       throws(block, [expected], [message])
   */
 
-    $.mockjax({
-        url: /\/ajax\/success$/,
-        responseTime: 50,
-        responseText: 'success'
-    });
-    $.mockjax({
-        url: /\/ajax\/error\/400$/,
-        status: 400,
-        responseTime: 50,
-        responseText: {
-            error: ['operation cancelled'],
-            form: {
-                test: ['invalid value']
+    QUnit.begin(function () {
+        $.mockjax({
+            url: /\/ajax\/success$/,
+            responseTime: 50,
+            responseText: 'success'
+        });
+        $.mockjax({
+            url: /\/ajax\/error\/400$/,
+            status: 400,
+            responseTime: 50,
+            responseText: {
+                error: ['operation cancelled'],
+                form: {
+                    test: ['invalid value']
+                }
             }
-        }
-    });
-    $.mockjax({
-        url: /\/ajax\/error\/500$/,
-        status: 500,
-        responseTime: 50,
-        responseText: 'internal server error'
+        });
+        $.mockjax({
+            url: /\/ajax\/error\/500$/,
+            status: 500,
+            responseTime: 50,
+            responseText: 'internal server error'
+        });
     });
 
     QUnit.done(function () {
@@ -73,7 +75,7 @@
         assert.equal(btn.eq(1).text(), 'Cancel', 'text of cancel button');
     });
 
-    QUnit.test('button label', function (assert) {
+    QUnit.test('custom button label', function (assert) {
         assert.expect(1);
 
         var element = $('<div></div>').formDialog({ actionLabel: 'FizzBuzz' }),
@@ -82,7 +84,7 @@
         assert.equal(btn.eq(0).text(), 'FizzBuzz', 'custom text of save button');
     });
 
-    QUnit.test('translate label', function (assert) {
+    QUnit.test('translate button label', function (assert) {
         assert.expect(2);
 
         var element = $('<div></div>').formDialog({ language: 'de' }),
@@ -92,6 +94,18 @@
         assert.equal(btn.eq(1).text(), 'Abbrechen', 'translated text of cancel button');
     });
 
+    QUnit.test('cancel button', function (assert) {
+        assert.expect(2);
+
+        var element = $('<div></div>').formDialog({ autoOpen: true }),
+            btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
+
+        assert.ok(element.dialog('isOpen'), 'dialog opened');
+        btn.eq(1).trigger('click');
+        assert.notOk(element.dialog('isOpen'), 'dialog closed');
+    });
+
+    // "save" button actions
     QUnit.module('formDialog: AJAX');
 
     QUnit.test('wrapped form', function (assert) {
