@@ -1,11 +1,13 @@
 {
   "name": "form-dialog",
+  "title": "jQueryUI Form Dialog",
   "version": "0.1.0",
   "description": "Create preconfigured jQueryUI dialog forms.",
   "keywords": [
     "jquery-plugin",
     "ecosystem:jquery"
   ],
+  "homepage": "https://github.com/Dormilich/jqueryui-form-dialog",
   "bugs": "https://github.com/Dormilich/jqueryui-form-dialog/issues",
   "license": "MIT",
   "author": {
