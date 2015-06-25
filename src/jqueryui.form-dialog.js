@@ -4,7 +4,7 @@
         $('<pre/>').text(text).dialog({
             title: title,
             close: function () {
-                $(this).dialog('destroy');
+                $(this).dialog('destroy').remove();
             }
         });
     }
@@ -23,7 +23,7 @@
         }
         catch (e) {
             // e.g. simple or empty strings
-            // console.log(e.message);
+            window.console.log(e.message);
         }
     }
 

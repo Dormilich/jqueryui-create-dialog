@@ -14,23 +14,42 @@
   <script src="../libs/qunit/qunit.js"></script>
   <!-- Load plugin. -->
   <script src="../src/jqueryui.form-dialog.js"></script>
+  <script type="text/javascript">
+// PhantomJS does not have this method
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP
+                 ? this
+                 : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    fNOP.prototype = this.prototype;
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
+  </script>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
-    <div id="form-wrapped">
+    <div id="form-1">
       <form action="/ajax/success" method="get">
         <input type="text" name="test" value="1">
       </form>
     </div>
-    <form action="/ajax/success" method="get" id="form-self">
+    <form action="/ajax/success" method="get" id="form-2">
       <input type="text" name="test" value="2">
-    </form>
-    <form action="/ajax/error/400" method="post" id="form-400">
-      <input type="text" name="test" value="3">
-    </form>
-    <form action="/ajax/error/500" method="post" id="form-500">
-      <input type="text" name="test" value="4">
     </form>
   </div>
   <script src="test.js"></script>

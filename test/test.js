@@ -1,4 +1,4 @@
-(function($, window) {
+(function($, window, document) {
   /*
     ======== A Handy Little QUnit Reference ========
     http://api.qunitjs.com/
@@ -70,9 +70,9 @@
         var element = $('<div></div>').formDialog(),
             btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
         
-        assert.equal(btn.length, 2, 'number of buttons');
-        assert.equal(btn.eq(0).text(), 'Save', 'text of save button');
-        assert.equal(btn.eq(1).text(), 'Cancel', 'text of cancel button');
+        assert.equal(btn.length, 2, 'dialog should have 2 buttons');
+        assert.equal(btn.eq(0).text(), 'Save', 'submit button should be named "Save"');
+        assert.equal(btn.eq(1).text(), 'Cancel', 'abort button should be named "Cancel"');
     });
 
     QUnit.test('custom button label', function (assert) {
@@ -81,7 +81,7 @@
         var element = $('<div></div>').formDialog({ actionLabel: 'FizzBuzz' }),
             btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
         
-        assert.equal(btn.eq(0).text(), 'FizzBuzz', 'custom text of save button');
+        assert.equal(btn.eq(0).text(), 'FizzBuzz', 'submit button should have custom label');
     });
 
     QUnit.test('translate button label', function (assert) {
@@ -90,8 +90,8 @@
         var element = $('<div></div>').formDialog({ language: 'de' }),
             btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
         
-        assert.equal(btn.eq(0).text(), 'Speichern', 'translated text of save button');
-        assert.equal(btn.eq(1).text(), 'Abbrechen', 'translated text of cancel button');
+        assert.equal(btn.eq(0).text(), 'Speichern', 'submit button label should be translated');
+        assert.equal(btn.eq(1).text(), 'Abbrechen', 'abort button label should be translated');
     });
 
     QUnit.test('cancel button', function (assert) {
@@ -100,9 +100,9 @@
         var element = $('<div></div>').formDialog({ autoOpen: true }),
             btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
 
-        assert.ok(element.dialog('isOpen'), 'dialog opened');
+        assert.ok(element.dialog('isOpen'), 'dialog should be open');
         btn.eq(1).trigger('click');
-        assert.notOk(element.dialog('isOpen'), 'dialog closed');
+        assert.notOk(element.dialog('isOpen'), 'dialog should be closed');
     });
 
     // "save" button actions
@@ -112,8 +112,8 @@
         var done = assert.async();
         assert.expect(1);
 
-        var element = $('#form-wrapped').formDialog(function (text) {
-            assert.equal(text, 'success', 'successful response');
+        var element = $('#form-1').formDialog(function (text) {
+            assert.equal(text, 'success', 'should have a success message');
             done();
         });
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
@@ -123,32 +123,61 @@
         var done = assert.async();
         assert.expect(1);
 
-        var element = $('#form-self').formDialog(function (text) {
-            assert.equal(text, 'success', 'successful response');
+        var element = $('#form-2').formDialog(function (text) {
+            assert.equal(text, 'success', 'should have a success message');
             done();
         });
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
 
     QUnit.test('server error', function (assert) {
+
         var done = assert.async();
         assert.expect(4);
 
-        var element = $('#form-500').formDialog();
+        var element = $('<form action="/ajax/error/500" method="post"></form>').formDialog();
 
-        $(window.document).ajaxComplete(function () {
+        $(document).one('ajaxComplete', function () {
             var popup = $('.ui-dialog pre');
-            assert.strictEqual(element.dialog('isOpen'), false, 'form dialog closed');
-            assert.strictEqual(popup.length, 1, 'error popup created');
-            assert.strictEqual(popup.text(), 'internal server error', 'using correct error message');
+            assert.strictEqual(element.dialog('isOpen'), false, 'form dialog should be closed');
+            assert.strictEqual(popup.length, 1, 'error popup should be created');
+            assert.strictEqual(popup.text(), 'internal server error', 'should be using correct error message');
 
             popup.dialog('close');
-            assert.strictEqual($('pre').length, 0, 'error popup removed');
+            assert.strictEqual($('pre').length, 0, 'error popup should be removed');
 
             done();
         });
 
-        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
 
-}(jQuery, window));
+    QUnit.test('validation error', function (assert) {
+        var done = assert.async();
+        assert.expect(6);
+
+        var element = $('<form action="/ajax/error/400" method="post"><input name="test"></form>').formDialog();
+
+        $(document).one('ajaxComplete', function () {
+            var popup = $('.ui-dialog pre');
+            assert.strictEqual(popup.length, 0, 'there should be no error popup');
+            assert.strictEqual(element.dialog('isOpen'), true, 'form dialog should be open');
+
+            var errors = element.find('ul.error');
+            assert.strictEqual(errors.length, 2, 'form dialog should have 2 error notes');
+
+            assert.equal(errors.eq(0).text(), 'operation cancelled', '1st error should be general');
+            assert.equal(errors.eq(1).text(), 'invalid value', '2nd error should be specific');
+
+            var sibling_name = errors.eq(1).next().prop('name');
+            assert.equal(sibling_name, 'test', 'specific error should be before form field');
+
+            element.dialog('close');
+
+            done();
+        });
+
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+    });
+
+}(jQuery, window, document));
