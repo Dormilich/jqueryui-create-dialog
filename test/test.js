@@ -124,9 +124,42 @@
         assert.expect(1);
 
         var element = $('<div></div>').formDialog({ autoOpen: true });
-        // this may need tweaking as there should be a 1px deviation allowed
-        assert.strictEqual(element.dialog("widget").width(), 500, 'default width should be 500px');
+        assert.close(element.dialog("widget").width(), 500, 1, 'default width should be 500px');
         element.remove();
+    });
+
+    QUnit.module('self configuration', {
+        beforeEach: function () {
+            this.elems = $('#qunit-fixture').children();
+        },
+        afterEach: function () {
+            this.elems.dialog('destroy');
+        }
+    });
+
+    QUnit.test('individual config', function (assert) {
+        var fd1 = $('#form-3');
+        var fd2 = $('#form-4');
+        assert.expect(9);
+
+        this.elems.formDialog();
+
+        //fd1.dialog('open');
+        assert.equal(fd1.dialog('option', 'appendTo'), fd1.data('appendTo'), 'option should be same as attribute');
+        assert.equal(fd1.dialog('widget').parent()[0], $(fd1.data('appendTo'))[0], 'container should match option');
+
+        assert.equal(fd1.dialog('option', 'width'), fd1.data('width'), 'option should be same as attribute');
+        assert.close(fd1.dialog('widget').width(), fd1.data('width'), 1, 'width should be 400px');
+
+        assert.equal(fd1.dialog('option', 'maxHeight'), fd1.data('maxHeight'), 'option should be same as attribute');
+        assert.equal(fd1.dialog('option', 'hide'), fd1.data('hide'), 'option should be same as attribute');
+        fd1.dialog('close');
+
+        fd2.dialog('open');
+        assert.equal(fd2.dialog('option', 'maxWidth'), fd2.data('maxWidth'), 'option should be same as attribute');
+        assert.equal(fd2.dialog('option', 'minHeight'), fd2.data('minHeight'), 'option should be same as attribute');
+        assert.equal(fd2.dialog('option', 'show'), fd2.data('show'), 'option should be same as attribute');
+        fd2.dialog('close');
     });
 
     // "save" button actions

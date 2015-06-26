@@ -105,15 +105,8 @@
         }];
 
         return this.each(function () {
-            var $elem = $(this),
-                autoconf = $elem.data();
-
-            if (autoconf) {
-                $elem.dialog($.extend({}, setting, autoconf));
-            }
-            else {
-                $elem.dialog(setting);
-            }
+            var $elem = $(this);
+            $elem.dialog($.extend({}, setting, $elem.data()));
         });
     };
 

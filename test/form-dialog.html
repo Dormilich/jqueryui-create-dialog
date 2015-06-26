@@ -11,6 +11,7 @@
   <!-- Load QUnit -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script src="../libs/qunit/qunit.js"></script>
+  <script src="../node_modules/qunit-assert-close/qunit-assert-close.js"></script>
   <!-- Load plugin -->
   <script src="../src/jqueryui.form-dialog.js"></script>
 </head>
@@ -25,7 +26,14 @@
     <form action="/ajax/success" method="get" id="form-2">
       <input type="text" name="test" value="2">
     </form>
+    <div id="form-3" data-append-to="#location" data-width="400" data-max-height="600" data-hide="2000" data-auto-open="true">
+      <form action=""></form>
+    </div>
+    <div id="form-4" data-max-width="750" data-min-height="400" data-show="true">
+      <form action=""></form>
+    </div>
   </div>
+  <div id="location"></div>
   <script src="test.js"></script>
   <script>window._$ = jQuery.noConflict(true);</script>
 </body>
