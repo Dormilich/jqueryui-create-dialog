@@ -1,24 +1,25 @@
-(function($, window, document) {
-  /*
-    ======== A Handy Little QUnit Reference ========
-    http://api.qunitjs.com/
+/*
+======== A Handy Little QUnit Reference ========
+  http://api.qunitjs.com/
 
-    Test methods:
-      module(name, {[setup][ ,teardown]})
-      test(name, callback)
-      expect(numberOfAssertions)
-      stop(increment)
-      start(decrement)
-    Test assertions:
-      ok(value, [message])
-      equal(actual, expected, [message])
-      notEqual(actual, expected, [message])
-      deepEqual(actual, expected, [message])
-      notDeepEqual(actual, expected, [message])
-      strictEqual(actual, expected, [message])
-      notStrictEqual(actual, expected, [message])
-      throws(block, [expected], [message])
-  */
+  Test methods:
+    module(name, {[beforeEach][, afterEach]})
+    test(name, callback)
+  Test assertions:
+    expect(numberOfAssertions)
+    async()
+    ok(value, [message])
+    notOk(value, [message])
+    equal(actual, expected, [message])
+    notEqual(actual, expected, [message])
+    deepEqual(actual, expected, [message])
+    notDeepEqual(actual, expected, [message])
+    strictEqual(actual, expected, [message])
+    notStrictEqual(actual, expected, [message])
+    throws(block, [expected], [message])
+*/
+
+(function (window, document, $) {
 
     QUnit.begin(function () {
         $.mockjax({
@@ -50,8 +51,7 @@
     });
 
     QUnit.module('formDialog: basics', {
-        // This will run before each test in this module.
-        setup: function() {
+        beforeEach: function() {
             this.elems = $('#qunit-fixture').children();
         }
     });
@@ -180,4 +180,4 @@
         element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
 
-}(jQuery, window, document));
+}(window, document, jQuery));
