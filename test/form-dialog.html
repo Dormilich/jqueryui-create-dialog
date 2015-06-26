@@ -3,42 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>Form Dialog Test Suite</title>
-  <!-- Load local jQuery. This can be overridden with a ?jquery=x.x.x param. -->
-  <script src="../libs/jquery-loader.js"></script>
-  <!-- Load local jQueryUI. This can be overridden with a ?jquery-ui=x.x.x param. -->
-  <script src="../libs/jquery-ui-loader.js"></script>
+  <!-- Load jQuery, jQueryUI, polyfills -->
+  <script src="../libs/bootstrap.js"></script>
+  <link rel="stylesheet" href="../libs/jquery-ui/jquery-ui.css">
   <!-- Load Mockjax -->
   <script src="../node_modules/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
-  <!-- Load local QUnit. -->
+  <!-- Load QUnit -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script src="../libs/qunit/qunit.js"></script>
-  <!-- Load plugin. -->
+  <!-- Load plugin -->
   <script src="../src/jqueryui.form-dialog.js"></script>
-  <script type="text/javascript">
-// PhantomJS does not have this method
-if (!Function.prototype.bind) {
-  Function.prototype.bind = function(oThis) {
-    if (typeof this !== 'function') {
-      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-    }
-
-    var aArgs   = Array.prototype.slice.call(arguments, 1),
-        fToBind = this,
-        fNOP    = function() {},
-        fBound  = function() {
-          return fToBind.apply(this instanceof fNOP
-                 ? this
-                 : oThis,
-                 aArgs.concat(Array.prototype.slice.call(arguments)));
-        };
-
-    fNOP.prototype = this.prototype;
-    fBound.prototype = new fNOP();
-
-    return fBound;
-  };
-}
-  </script>
 </head>
 <body>
   <div id="qunit"></div>
@@ -53,9 +27,6 @@ if (!Function.prototype.bind) {
     </form>
   </div>
   <script src="test.js"></script>
-  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
-       you REALLY want to mess around with jQuery in the console. REMEMBER WE
-       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
   <script>window._$ = jQuery.noConflict(true);</script>
 </body>
 </html>
