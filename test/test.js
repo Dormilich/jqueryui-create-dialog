@@ -19,7 +19,7 @@
     throws(block, [expected], [message])
 */
 
-(function (window, document, $) {
+(function (window, document, QUnit, $) {
 
     QUnit.begin(function () {
         $.mockjax({
@@ -50,7 +50,7 @@
         $.mockjax.clear();
     });
 
-    QUnit.module('formDialog: basics', {
+    QUnit.module('basics', {
         beforeEach: function() {
             this.elems = $('#qunit-fixture').children();
         }
@@ -62,7 +62,7 @@
         assert.strictEqual(this.elems.formDialog(), this.elems, 'should be chainable');
     });
 
-    QUnit.module('formDialog: buttons');
+    QUnit.module('buttons');
 
     QUnit.test('button properties', function (assert) {
         assert.expect(3);
@@ -105,8 +105,32 @@
         assert.notOk(element.dialog('isOpen'), 'dialog should be closed');
     });
 
+    QUnit.module('global dialog options');
+
+    QUnit.test('autoOpen', function (assert) {
+        var element;
+        assert.expect(2);
+
+        element = $('<div></div>').formDialog();
+        assert.notOk(element.dialog("widget").is(":visible"), 'dialog should not be open by default');
+        element.remove();
+
+        element = $('<div></div>').formDialog({ autoOpen: true });
+        assert.ok(element.dialog("widget").is(":visible"), 'dialog should be open by default');
+        element.remove();
+    });
+
+    QUnit.test('width', function (assert) {
+        assert.expect(1);
+
+        var element = $('<div></div>').formDialog({ autoOpen: true });
+        // this may need tweaking as there should be a 1px deviation allowed
+        assert.strictEqual(element.dialog("widget").width(), 500, 'default width should be 500px');
+        element.remove();
+    });
+
     // "save" button actions
-    QUnit.module('formDialog: AJAX');
+    QUnit.module('AJAX');
 
     QUnit.test('wrapped form', function (assert) {
         var done = assert.async();
@@ -180,4 +204,4 @@
         element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
     });
 
-}(window, document, jQuery));
+}(window, document, QUnit, jQuery));
