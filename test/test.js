@@ -162,6 +162,19 @@
         fd2.dialog('close');
     });
 
+    QUnit.test('option pecedence', function (assert) {
+        var fd = $('#form-3');
+        assert.expect(2);
+
+        this.elems.formDialog({
+            width: 200
+        });
+
+        assert.equal(fd.dialog('option', 'width'), 200, 'option should overwrite attribute');
+        assert.close(fd.dialog('widget').width(), 200, 1, 'width should be 200px');
+        fd.dialog('close');
+    });
+
     // "save" button actions
     QUnit.module('AJAX');
 
