@@ -40,6 +40,8 @@
     /**
      * Create a jQueryUI dialog from the element. The AJAX URL, data, and method 
      * are read from the contained form.
+     *
+     * Precedence of options: default < attribute < option
      * 
      * @param (object) options [optional] jQueryUI dialog options / plugin options
      * @param (function) success [optional] jQuery AJAX success handler
@@ -53,7 +55,14 @@
             options = {};
         }
         var plugin  = $.fn.formDialog;
-        var setting = $.extend({}, plugin.defaults, options);
+        var setting = $.extend({}, plugin.defaults);
+
+        // extract the plugin options
+        $.each(options, function (key, value) {
+            if (key in setting) {
+                setting[key] = value;
+            }
+        });
 
         setting.buttons = [{
             text:  plugin.translate(setting.language, setting.actionLabel),
@@ -105,8 +114,25 @@
         }];
 
         return this.each(function () {
-            var $elem = $(this);
-            $elem.dialog($.extend({}, setting, $elem.data()));
+            var config = $.extend({}, setting),
+                $elem = $(this);
+
+            // while extend(setting, elem.data()) works,
+            // extend(elem.data(), setting) and extend(this.dataset, setting) do not, 
+            // hence the workaround 
+            [].map.call(this.attributes, function (attr) {
+                return attr.name;
+            }).filter(function (name) {
+                return name.indexOf('data-') === 0;
+            }).map(function (name) {
+                return name.substring(5).replace(/-(\w)/, function (m, p1) {
+                    return p1.toUpperCase();
+                });
+            }).forEach(function (option) {
+                config[option] = $elem.data(option);
+            });
+
+            $elem.dialog($.extend(config, options));
         });
     };
 
