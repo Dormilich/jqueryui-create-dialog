@@ -116,7 +116,7 @@
         return this.each(function () {
             var config = $.extend({}, setting),
                 $elem = $(this);
-
+/*
             // while extend(setting, elem.data()) works,
             // extend(elem.data(), setting) and extend(this.dataset, setting) do not, 
             // hence the workaround 
@@ -131,7 +131,10 @@
             }).forEach(function (option) {
                 config[option] = $elem.data(option);
             });
-
+*/
+            $.map(this.dataset, function (value, key) {
+                config[key] = $elem.data(key);
+            });
             $elem.dialog($.extend(config, options));
         });
     };
