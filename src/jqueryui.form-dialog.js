@@ -116,23 +116,8 @@
         return this.each(function () {
             var config = $.extend({}, setting),
                 $elem = $(this);
-/*
-            // while extend(setting, elem.data()) works,
-            // extend(elem.data(), setting) and extend(this.dataset, setting) do not, 
-            // hence the workaround 
-            [].map.call(this.attributes, function (attr) {
-                return attr.name;
-            }).filter(function (name) {
-                return name.indexOf('data-') === 0;
-            }).map(function (name) {
-                return name.substring(5).replace(/-(\w)/, function (m, p1) {
-                    return p1.toUpperCase();
-                });
-            }).forEach(function (option) {
-                config[option] = $elem.data(option);
-            });
-*/
-            $.map(this.dataset, function (value, key) {
+
+            $.each(this.dataset, function (key) {
                 config[key] = $elem.data(key);
             });
             $elem.dialog($.extend(config, options));
