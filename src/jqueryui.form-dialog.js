@@ -57,7 +57,8 @@
         var plugin  = $.fn.formDialog;
         var setting = $.extend({}, plugin.defaults);
 
-        // extract the plugin options
+        // extract only the plugin options
+        // otherwise there are problems with the auto-config
         $.each(options, function (key, value) {
             if (key in setting) {
                 setting[key] = value;
