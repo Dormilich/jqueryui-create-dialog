@@ -128,9 +128,41 @@
         });
     };
 
-    // global defaults
+    $.fn.formDialog.translate = function (language, key) {
+        if (!(language in $.fn.formDialog.dictionary)) {
+            return key;
+        }
+        var dictionary = $.fn.formDialog.dictionary[language];
+        if (key in dictionary) {
+            return dictionary[key];
+        }
+        return key;
+    };
+
+    /**
+     * Transform the form’s data into a jQuery AJAX compatible format 
+     * (see 'data' option in $.ajax). Defaults to jQuery’s serialize().
+     *
+     * @param (jQuery) $form jQuery object of the form element.
+     * @scope (HTMLElement) DOM form element.
+     * @return (string|object|array) jQuery AJAX compatible form data.
+     */
+    $.fn.formDialog.formalise = function ($form) {
+        return $form.serialize();
+    };
+
+    $.fn.formDialog.dictionary = {
+        de: {
+            Cancel: 'Abbrechen',
+            Delete: 'Löschen',
+            Edit:   'Bearbeiten',
+            Error:  'Fehler',
+            Save:   'Speichern'
+        }
+    };
+
     $.fn.formDialog.defaults = {
-        // dialog options:
+        // modified dialog options:
 
         autoOpen: false,
         modal: true,
@@ -145,32 +177,9 @@
         // Close the dialog automatically if the AJAX submit was successful.
         autoClose: true,
         // form data processing function
-        formData: $.fn.formDialog.formalise
-    };
-
-    $.fn.formDialog.dictionary = {
-        de: {
-            Cancel: 'Abbrechen',
-            Delete: 'Löschen',
-            Edit:   'Bearbeiten',
-            Error:  'Fehler',
-            Save:   'Speichern'
-        }
-    };
-
-    $.fn.formDialog.translate = function (language, key) {
-        if (!(language in $.fn.formDialog.dictionary)) {
-            return key;
-        }
-        var dictionary = $.fn.formDialog.dictionary[language];
-        if (key in dictionary) {
-            return dictionary[key];
-        }
-        return key;
-    };
-
-    $.fn.formDialog.formalise = function ($form) {
-        return $form.serialize();
+        formData: $.fn.formDialog.formalise,
+        // alternate/additional success function
+        success: null
     };
 
 }(jQuery));

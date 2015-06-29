@@ -242,4 +242,25 @@
         this.server.respond();
     });
 
+    QUnit.test('form data processor', function (assert) {
+        var done = assert.async(),
+            server = this.server,
+            html = '<form action="/ajax/success" method="post"><input name="test" value="foo"></form>';
+        assert.expect(2);
+
+        var element = $(html).formDialog({
+            formData: function () {
+                return 'test=bar';
+            },
+            success: function (txt) {
+                assert.strictEqual(txt, 'success', 'should have success message');
+                assert.strictEqual(server.requests[0].requestBody, 'test=bar', 'should have modified request body');
+                done();
+            }
+        });
+
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
+    });
+
 }(window, document, QUnit, jQuery, window.sinon));
