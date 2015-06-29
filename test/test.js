@@ -19,36 +19,7 @@
     throws(block, [expected], [message])
 */
 
-(function (window, document, QUnit, $) {
-
-    QUnit.begin(function () {
-        $.mockjax({
-            url: /\/ajax\/success$/,
-            responseTime: 50,
-            responseText: 'success'
-        });
-        $.mockjax({
-            url: /\/ajax\/error\/400$/,
-            status: 400,
-            responseTime: 50,
-            responseText: {
-                error: ['operation cancelled'],
-                form: {
-                    test: ['invalid value']
-                }
-            }
-        });
-        $.mockjax({
-            url: /\/ajax\/error\/500$/,
-            status: 500,
-            responseTime: 50,
-            responseText: 'internal server error'
-        });
-    });
-
-    QUnit.done(function () {
-        $.mockjax.clear();
-    });
+(function (window, document, QUnit, $, sinon) {
 
     QUnit.module('basics', {
         beforeEach: function() {
@@ -176,32 +147,51 @@
     });
 
     // "save" button actions
-    QUnit.module('AJAX');
+    QUnit.module('AJAX', {
+        beforeEach: function () {
+            this.requests = [];
+            this.server = sinon.fakeServer.create();
+            this.server.respondWith(/\/ajax\/success/, [200, {
+                "Content-Type": "text/plain"
+            }, 'success']);
+            this.server.respondWith(/\/ajax\/error\/500/, [500, {
+                "Content-Type": "text/plain"
+            }, 'internal server error']);
+            this.server.respondWith(/\/ajax\/error\/400/, [400, {
+                "Content-Type": "application/json"
+            }, '{"error":["operation cancelled"],"form":{"test":["invalid value"]}}']);
+        },
+        afterEach: function () {
+            this.server.restore();
+        }
+    });
 
     QUnit.test('wrapped form', function (assert) {
         var done = assert.async();
         assert.expect(1);
 
-        var element = $('#form-1').formDialog(function (text) {
-            assert.equal(text, 'success', 'should have a success message');
+        var element = $('#form-1').formDialog(function (txt) {
+            assert.strictEqual(txt, 'success', 'should have success message');
             done();
         });
+
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
     });
 
     QUnit.test('unwrapped form', function (assert) {
         var done = assert.async();
         assert.expect(1);
 
-        var element = $('#form-2').formDialog(function (text) {
-            assert.equal(text, 'success', 'should have a success message');
+        var element = $('#form-2').formDialog(function (txt) {
+            assert.strictEqual(txt, 'success', 'should have success message');
             done();
         });
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
     });
 
     QUnit.test('server error', function (assert) {
-
         var done = assert.async();
         assert.expect(4);
 
@@ -219,7 +209,8 @@
             done();
         });
 
-        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
     });
 
     QUnit.test('validation error', function (assert) {
@@ -248,6 +239,7 @@
         });
 
         element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
     });
 
-}(window, document, QUnit, jQuery));
+}(window, document, QUnit, jQuery, window.sinon));
