@@ -64,6 +64,10 @@
             }
         });
 
+        if (!$.isFunction(setting.formData)) {
+            setting.formData = plugin.formalise;
+        }
+
         setting.buttons = [{
             text:  plugin.translate(setting.language, setting.actionLabel),
             click: function (evt) {
@@ -79,7 +83,7 @@
 
                 var ajax = $.ajax($form.prop('action'), {
                     type: $form.prop('method'),
-                    data: $form.serialize(),
+                    data: setting.formData.call($form[0], $form),
                     context: $dialog,
                     statusCode: {
                         400: _showErrors,
@@ -139,7 +143,9 @@
         // The name to be used on the "submit" button.  
         actionLabel: 'Save',
         // Close the dialog automatically if the AJAX submit was successful.
-        autoClose: true
+        autoClose: true,
+        // form data processing function
+        formData: $.fn.formDialog.formalise
     };
 
     $.fn.formDialog.dictionary = {
@@ -162,4 +168,9 @@
         }
         return key;
     };
+
+    $.fn.formDialog.formalise = function ($form) {
+        return $form.serialize();
+    };
+
 }(jQuery));
