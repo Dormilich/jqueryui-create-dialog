@@ -133,7 +133,7 @@
         fd2.dialog('close');
     });
 
-    QUnit.test('option pecedence', function (assert) {
+    QUnit.test('option precedence', function (assert) {
         var fd = $('#form-3');
         assert.expect(2);
 
