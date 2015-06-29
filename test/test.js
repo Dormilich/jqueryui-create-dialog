@@ -149,14 +149,16 @@
     // "save" button actions
     QUnit.module('AJAX', {
         beforeEach: function () {
-            this.requests = [];
             this.server = sinon.fakeServer.create();
+            // success
             this.server.respondWith(/\/ajax\/success/, [200, {
                 "Content-Type": "text/plain"
             }, 'success']);
+            // server error
             this.server.respondWith(/\/ajax\/error\/500/, [500, {
                 "Content-Type": "text/plain"
             }, 'internal server error']);
+            // validation error
             this.server.respondWith(/\/ajax\/error\/400/, [400, {
                 "Content-Type": "application/json"
             }, '{"error":["operation cancelled"],"form":{"test":["invalid value"]}}']);
