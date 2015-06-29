@@ -255,7 +255,7 @@
                 assert.ok(this instanceof HTMLFormElement, 'scope should be form element');
                 // 'jQuery' has been removed from the global scope
                 assert.ok(form instanceof $, 'parameter should be jQuery object');
-                assert.ok(form[0] instanceof HTMLFormElement, 'scope should be form element');
+                assert.ok(form[0] instanceof HTMLFormElement, 'parameter should be jQuery form element');
 
                 return 'test=bar';
             },
