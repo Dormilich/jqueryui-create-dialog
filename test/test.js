@@ -248,10 +248,15 @@
         var done = assert.async(),
             server = this.server,
             html = '<form action="/ajax/success" method="post"><input name="test" value="foo"></form>';
-        assert.expect(2);
+        assert.expect(5);
 
         var element = $(html).formDialog({
-            formData: function () {
+            formData: function (form) {
+                assert.ok(this instanceof HTMLFormElement, 'scope should be form element');
+                // 'jQuery' has been removed from the global scope
+                assert.ok(form instanceof $, 'parameter should be jQuery object');
+                assert.ok(form[0] instanceof HTMLFormElement, 'scope should be form element');
+
                 return 'test=bar';
             },
             success: function (txt) {
