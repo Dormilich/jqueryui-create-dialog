@@ -13,7 +13,7 @@ In your web page:
 ```html
 <script src="jquery.min.js"></script>
 <script src="jquery-ui.min.js"></script>
-<script src="dist/form-dialog.min.js"></script>
+<script src="dist/jqueryui.form-dialog.min.js"></script>
 ```
 
 ## Documentation
@@ -31,6 +31,7 @@ Setting up a comment popup that saves the comment through a REST API when you hi
 $('#api-call').formDialog(function () {
 	alert('Comment saved.');
 });
+
 $('#some-button').on('click', function (evt) {
 	$('#api-call').dialog('open');
 });
