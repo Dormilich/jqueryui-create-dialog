@@ -79,7 +79,7 @@
         }
     });
 
-    QUnit.test('button properties', function (assert) {
+    QUnit.test('default buttons', function (assert) {
         var btn;
         assert.expect(3);
 
@@ -89,6 +89,17 @@
         assert.equal(btn.length, 2, 'dialog should have 2 buttons');
         assert.equal(btn.eq(0).text(), 'Save', 'submit button should be named "Save"');
         assert.equal(btn.eq(1).text(), 'Cancel', 'abort button should be named "Cancel"');
+    });
+
+    QUnit.test('no form no buttons', function (assert) {
+        var btn, elem;
+        assert.expect(1);
+
+        elem = $('<div></div>').formDialog();
+        btn = elem.dialog('widget').find('.ui-dialog-buttonpane button');
+
+        assert.strictEqual(btn.length, 0, 'should have no buttons');
+        elem.remove();
     });
 
     QUnit.test('custom button label', function (assert) {
