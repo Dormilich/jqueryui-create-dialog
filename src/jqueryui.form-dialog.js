@@ -48,14 +48,17 @@
      * @return jQuery
      */
     $.fn.formDialog = function (options, success) {
+        var plugin, setting;
+
         if ($.isFunction(options)) {
             success = options;
         }
         if (typeof options !== 'object') { // null is ignored in $.extend()
             options = {};
         }
-        var plugin  = $.fn.formDialog;
-        var setting = $.extend({}, plugin.defaults);
+
+        plugin  = $.fn.formDialog;
+        setting = $.extend({}, plugin.defaults);
 
         // extract only the plugin options
         // otherwise there are problems with the auto-config
@@ -72,9 +75,11 @@
         setting.buttons = [{
             text:  plugin.translate(setting.language, setting.actionLabel),
             click: function (evt) {
-                var button  = evt.target; // the 'Save' button
-                var $dialog = $(this);
-                var $form   = $dialog.find('form').addBack('form');
+                var button  = evt.target, // the 'Save' button
+                    $dialog = $(this),
+                    $form   = plugin.getForm($dialog),
+                    ajax;
+
                 if ($form.find(':invalid').length > 0) {
                     return false;
                 }
@@ -82,7 +87,7 @@
                 button.disabled = true;
                 $dialog.find('ul.error').remove();
 
-                var ajax = $.ajax($form.prop('action'), {
+                ajax = $.ajax($form.prop('action'), {
                     type: $form.prop('method'),
                     data: setting.formData.call($form[0], $form),
                     context: $dialog,
@@ -103,12 +108,12 @@
                     });
                 }
 
-                if ($.isFunction(success)) {
-                    ajax.done(success);
-                }
-
                 if ($.isFunction(setting.success)) {
                     ajax.done(setting.success);
+                }
+
+                if ($.isFunction(success)) {
+                    ajax.done(success);
                 }
             }
         }, {
@@ -120,22 +125,28 @@
 
         return this.each(function () {
             var config = $.extend({}, setting),
-                $elem = $(this);
+                $elem  = $(this);
+
+            if (plugin.getForm($elem).length === 0) {
+                delete config.buttons;
+            }
 
             $.each(this.dataset, function (key) {
                 config[key] = $elem.data(key);
             });
+ 
             $elem.dialog($.extend(config, options));
         });
     };
 
     $.fn.formDialog.translate = function (language, key) {
-        if (!(language in $.fn.formDialog.dictionary)) {
+        var dictionary = $.fn.formDialog.dictionary;
+
+        if (!(language in dictionary)) {
             return key;
         }
-        var dictionary = $.fn.formDialog.dictionary[language];
-        if (key in dictionary) {
-            return dictionary[key];
+        if (key in dictionary[language]) {
+            return dictionary[language][key];
         }
         return key;
     };
@@ -151,6 +162,10 @@
     $.fn.formDialog.formalise = function ($form) {
         return $form.serialize();
     };
+
+    $.fn.formDialog.getForm = function ($elem) {
+        return $elem.find('form').addBack('form');
+    }
 
     $.fn.formDialog.dictionary = {
         de: {
