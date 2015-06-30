@@ -11,20 +11,27 @@ Download the [production version][min] or the [development version][max].
 In your web page:
 
 ```html
-<script src="jquery.js"></script>
+<script src="jquery.min.js"></script>
+<script src="jquery-ui.min.js"></script>
 <script src="dist/form-dialog.min.js"></script>
-<script>
-jQuery(function($) {
-  $.awesome(); // "awesome"
-});
-</script>
 ```
 
 ## Documentation
 _(Coming soon)_
 
 ## Examples
-_(Coming soon)_
 
-## Release History
-_(Nothing yet)_
+Setting up a comment popup that saves the comment through a REST API when you hit the 'Save' button.
+```html
+<form action="/api/endpoint" method="post" id="api-call" title="Your comment">
+	<textarea name="comment"></textarea>
+</form>
+```
+```javascript
+$('#api-call').formDialog(function () {
+	alert('Comment saved.');
+});
+$('#some-button').on('click', function (evt) {
+	$('#api-call').dialog('open');
+});
+```
