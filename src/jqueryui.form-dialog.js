@@ -165,7 +165,7 @@
 
     $.fn.formDialog.getForm = function ($elem) {
         return $elem.find('form').addBack('form');
-    }
+    };
 
     $.fn.formDialog.dictionary = {
         de: {

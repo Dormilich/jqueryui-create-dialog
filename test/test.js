@@ -33,13 +33,58 @@
         assert.strictEqual(this.elems.formDialog(), this.elems, 'should be chainable');
     });
 
-    QUnit.module('buttons');
+    QUnit.module('global dialog options', {
+        beforeEach: function () {
+            this.elem = $('<div><form></form></div>');
+        },
+        afterEach: function () {
+            this.elem.remove();
+        }
+    });
+
+    QUnit.test('autoOpen: true', function (assert) {
+        assert.expect(1);
+
+        this.elem.formDialog({ autoOpen: true });
+        assert.ok(this.elem.dialog("widget").is(":visible"), 'dialog should be open by default');
+    });
+
+    QUnit.test('autoOpen: false', function (assert) {
+        assert.expect(1);
+
+        this.elem.formDialog({ autoOpen: false });
+        assert.notOk(this.elem.dialog("widget").is(":visible"), 'dialog should not be open by default');
+    });
+
+    QUnit.test('autoOpen: default', function (assert) {
+        assert.expect(1);
+
+        this.elem.formDialog();
+        assert.notOk(this.elem.dialog("widget").is(":visible"), 'dialog should not be open by default');
+    });
+
+    QUnit.test('width', function (assert) {
+        assert.expect(1);
+
+        this.elem.formDialog({ autoOpen: true });
+        assert.close(this.elem.dialog("widget").width(), 500, 1, 'default width should be 500px');
+   });
+
+    QUnit.module('buttons', {
+        beforeEach: function () {
+            this.elem = $('<div><form></form></div>');
+        },
+        afterEach: function () {
+            this.elem.remove();
+        }
+    });
 
     QUnit.test('button properties', function (assert) {
+        var btn;
         assert.expect(3);
 
-        var element = $('<div></div>').formDialog(),
-            btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
+        this.elem.formDialog();
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
         
         assert.equal(btn.length, 2, 'dialog should have 2 buttons');
         assert.equal(btn.eq(0).text(), 'Save', 'submit button should be named "Save"');
@@ -47,56 +92,36 @@
     });
 
     QUnit.test('custom button label', function (assert) {
+        var btn;
         assert.expect(1);
 
-        var element = $('<div></div>').formDialog({ actionLabel: 'FizzBuzz' }),
-            btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
+        this.elem.formDialog({ actionLabel: 'FizzBuzz' });
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
         
         assert.equal(btn.eq(0).text(), 'FizzBuzz', 'submit button should have custom label');
     });
 
     QUnit.test('translate button label', function (assert) {
+        var btn;
         assert.expect(2);
 
-        var element = $('<div></div>').formDialog({ language: 'de' }),
-            btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
+        this.elem.formDialog({ language: 'de' });
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
         
         assert.equal(btn.eq(0).text(), 'Speichern', 'submit button label should be translated');
         assert.equal(btn.eq(1).text(), 'Abbrechen', 'abort button label should be translated');
     });
 
     QUnit.test('cancel button', function (assert) {
+        var btn;
         assert.expect(2);
 
-        var element = $('<div></div>').formDialog({ autoOpen: true }),
-            btn = element.dialog('widget').find('.ui-dialog-buttonpane button');
+        this.elem.formDialog({ autoOpen: true });
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
 
-        assert.ok(element.dialog('isOpen'), 'dialog should be open');
+        assert.ok(this.elem.dialog('isOpen'), 'dialog should be open');
         btn.eq(1).trigger('click');
-        assert.notOk(element.dialog('isOpen'), 'dialog should be closed');
-    });
-
-    QUnit.module('global dialog options');
-
-    QUnit.test('autoOpen', function (assert) {
-        var element;
-        assert.expect(2);
-
-        element = $('<div></div>').formDialog();
-        assert.notOk(element.dialog("widget").is(":visible"), 'dialog should not be open by default');
-        element.remove();
-
-        element = $('<div></div>').formDialog({ autoOpen: true });
-        assert.ok(element.dialog("widget").is(":visible"), 'dialog should be open by default');
-        element.remove();
-    });
-
-    QUnit.test('width', function (assert) {
-        assert.expect(1);
-
-        var element = $('<div></div>').formDialog({ autoOpen: true });
-        assert.close(element.dialog("widget").width(), 500, 1, 'default width should be 500px');
-        element.remove();
+        assert.notOk(this.elem.dialog('isOpen'), 'dialog should be closed');
     });
 
     QUnit.module('self configuration', {
