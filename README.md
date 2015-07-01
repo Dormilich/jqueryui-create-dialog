@@ -50,7 +50,40 @@ $.fn.formDialog.<language> = {
 
 If you use (a) different _actionLabel_, you’ll have to add that as well. If you use a label or a language that is not present in the dictionary, it will be returned unchanged.
 
-By setting the _language_ appropriately option you can now translate the labels to the desired language.
+By setting the _language_ option appropriately you can now translate the labels to the desired language.
+
+## Error Handling
+
+Not every AJAX call is successful. Sometimes the user data are invalid, sometimes the server goes bonkers. For those cases there are two error handlers built-in.
+
+### Validation Errors
+
+These errors happen when something is wrong with the supplied user data. 
+
+For the validation error handler to kick in successfully, send an **HTTP 400** Status Code and a **JSON encoded object** according to
+
+```json
+{
+	"errors": [
+		"general form error #1",
+		"general form error #2"
+	],
+	"form": {
+		"field_name_1": [
+			"form field 1 error #1"
+		],
+		"field_name_2": [
+			"form field 2 error #1",
+			"form field 2 error #2"
+		]
+	}
+}
+```
+Both the "errors" and the "form" keys are optional. If there are messages defined for the "errors" key, the plugin will put an unordered list of all the messages right at the beginning of the form. The messages under the "form" key will be put before the first form element of the same name as the form field key. Even if there is only one error message per key, wrap it into an array.
+
+### Server Errors
+
+If there occurred a problem on the server that does not relate to the user data, send an **HTTP 500** Status Code and a **plain text error message**. The plugin will close the current dialog and open a separate dialog containing the error message.
 
 ## Examples
 
@@ -73,7 +106,10 @@ $('#some-button').on('click', function (evt) {
 Alternatively, you can fetch the form element via AJAX.
 ```javascript
 $.get('/path/to/dialog.html', function (html) {
-	$(html).formDialog({ autoOpen: true }, success);
+	$(html).formDialog({ autoOpen: true }, function () {
+		alert('Comment saved');
+		// this.remove();
+	});
 })
 ```
 
