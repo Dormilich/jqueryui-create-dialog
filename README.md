@@ -1,6 +1,6 @@
 # Form Dialog
 
-Create preconfigured jQueryUI dialog forms.
+Create preconfigured jQueryUI dialog forms. If the dialog element is/contains a form element, this plugin will create a submit button (named "Save" by default) that will collect the data from the form and send them to the URL given by the form’s _action_ attribute (the browser will resolve the (not) given value into a full absolute URL) using the form’s _method_ value as transfer method (the browser’s default is GET). 
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
@@ -22,7 +22,11 @@ In your web page:
 
 **success** a function executed when the AJAX request returns successfully. It takes the same parameters as the jQuery AJAX success handler. The scope of the function is the dialog element.
 
-**options** can be any jQueryUI Dialog option.
+**options** can be any jQueryUI Dialog option. Some of them have different default values to the Dialog widget:
+
+- _autoOpen_ `false`
+- _modal_ `true`
+- _width_ `500`
 
 Additionally, there are plugin specific options:
 
@@ -65,3 +69,34 @@ $('#some-button').on('click', function (evt) {
 	$('#api-call').dialog('open');
 });
 ```
+
+Alternatively, you can fetch the form element via AJAX.
+```javascript
+$.get('/path/to/dialog.html', function (html) {
+	$(html).formDialog({ autoOpen: true }, success);
+})
+```
+
+Defining dialog/plugin options.
+```javascript
+$('#dialog').formDialog({
+    width: 600,      // Dialog option
+    language: 'de'   // Plugin option
+});
+```
+
+Defining dialog options in the dialog element.
+```html
+<form action="/api/endpoint" method="post" data-width="420" data-max-height="700" data-show="true">
+	<textarea name="comment"></textarea>
+</form>
+```
+Through appropriate data attributes you can pre-set any jQueryUI Dialog option that accepts a primitive value (strings, numbers, booleans). Be aware however that this will be overridden by any option you pass into the plugin.
+
+### Note on URL notations
+
+Given that the page in question is `https://example.com/foo/index.html`, then browsers will make the following modifications automatically.
+
+- `some/script.php` => `https://example.com/foo/some/script.php`
+- `/some/script.php` => `https://example.com/some/script.php`
+- `//some/script.php` => `https://some/script.php`
