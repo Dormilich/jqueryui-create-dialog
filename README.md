@@ -1,6 +1,6 @@
 # Form Dialog
 
-Create preconfigured jQueryUI dialog forms. If the dialog element is/contains a form element, this plugin will create a submit button (named "Save" by default) that will collect the data from the form and send them to the URL given by the form’s _action_ attribute (the browser will resolve the (not) given value into a full absolute URL) using the form’s _method_ value as transfer method (the browser’s default is GET). 
+Create preconfigured jQueryUI dialog forms. If the dialog element is/contains a form element, this plugin will create a close button (named "Cancel") and a submit button (named "Save" by default) that will collect the data from the form and send them to the URL given by the form’s _action_ attribute (the browser will resolve the (not) given value into a full absolute URL) using the form’s _method_ value as transfer method (the browser’s default is GET). 
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].

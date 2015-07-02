@@ -168,7 +168,7 @@
     };
 
     $.fn.formDialog.getForm   = function ($elem) {
-        return $elem.find('form').addBack('form');
+        return $elem.find('form').addBack('form').eq(0);
     };
 
     $.fn.formDialog.translate = function (language, key) {
