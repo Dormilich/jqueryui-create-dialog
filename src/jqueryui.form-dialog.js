@@ -48,7 +48,7 @@
      * @return jQuery
      */
     $.fn.formDialog = function (options, success) {
-        var plugin, setting;
+        var plugin, setting, buttons;
 
         if ($.isFunction(options)) {
             success = options;
@@ -58,21 +58,13 @@
         }
 
         plugin  = $.fn.formDialog;
-        setting = $.extend({}, plugin.defaults);
-
-        // extract only the plugin options
-        // otherwise there are problems with the auto-config
-        $.each(options, function (key, value) {
-            if (key in setting) {
-                setting[key] = value;
-            }
-        });
+        setting = $.extend({}, plugin.defaults, options);
 
         if (!$.isFunction(setting.formData)) {
             setting.formData = plugin.formalise;
         }
 
-        setting.buttons = [{
+        buttons = [{
             text:  plugin.translate(setting.language, setting.actionLabel),
             click: function (evt) {
                 var button  = evt.target, // the 'Save' button
@@ -127,13 +119,13 @@
             var config = $.extend({}, setting),
                 $elem  = $(this);
 
-            if (plugin.getForm($elem).length === 0) {
-                delete config.buttons;
-            }
-
             $.each(this.dataset, function (key) {
                 config[key] = $elem.data(key);
             });
+
+            if (plugin.getForm($elem).length > 0) {
+                config.buttons = buttons;
+            }
  
             $elem.dialog($.extend(config, options));
         });
