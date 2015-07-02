@@ -152,6 +152,24 @@
         assert.equal(btn.eq(2).text(), 'Cancel', '3rd button should be named "Cancel"');
     });
 
+    QUnit.test('additional buttons (array)', function (assert) {
+        var btn;
+        assert.expect(4);
+
+        this.elem.formDialog({
+            buttons: [{
+                text: 'Edit',
+                click: function () {}
+            }]
+        });
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
+        
+        assert.equal(btn.length, 3, 'dialog should have 3 buttons');
+        assert.equal(btn.eq(0).text(), 'Edit', '1st button should be named "Edit"');
+        assert.equal(btn.eq(1).text(), 'Save', '2nd button should be named "Save"');
+        assert.equal(btn.eq(2).text(), 'Cancel', '3rd button should be named "Cancel"');
+    });
+
     QUnit.module('self configuration', {
         beforeEach: function () {
             this.elems = $('#qunit-fixture').children();
