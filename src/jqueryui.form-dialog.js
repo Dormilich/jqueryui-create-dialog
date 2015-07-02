@@ -58,7 +58,19 @@
         }
 
         plugin  = $.fn.formDialog;
-        setting = $.extend({}, plugin.defaults, options);
+        setting = $.extend({}, plugin.defaults);
+
+        // extract only the plugin options
+        // otherwise there are problems with the auto-config
+        $.each(options, function (key, value) {
+            if (key in setting) {
+                setting[key] = value;
+            }
+        });
+
+        if (!('buttons' in options)) {
+            options.buttons = [];
+        }
 
         if (!$.isFunction(setting.formData)) {
             setting.formData = plugin.formalise;
@@ -124,10 +136,10 @@
             });
 
             if (plugin.getForm($elem).length > 0) {
-                config.buttons = buttons;
+                config.buttons = $.merge(plugin.buttonise(options.buttons), buttons);
             }
  
-            $elem.dialog($.extend(config, options));
+            $elem.dialog(config, options);
         });
     };
 
@@ -155,7 +167,20 @@
         return $form.serialize();
     };
 
-    $.fn.formDialog.getForm = function ($elem) {
+    $.fn.formDialog.buttonise = function (buttons) {
+        if ($.isArray(buttons)) {
+            return buttons;
+        }
+
+        return $.map(buttons, function (props, name) {
+            return $.isFunction(props) ? {
+                click: props,
+                text: name
+            } : props;
+        });
+    };
+
+    $.fn.formDialog.getForm   = function ($elem) {
         return $elem.find('form').addBack('form');
     };
 
