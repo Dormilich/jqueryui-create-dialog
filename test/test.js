@@ -135,6 +135,23 @@
         assert.notOk(this.elem.dialog('isOpen'), 'dialog should be closed');
     });
 
+    QUnit.test('additional buttons (object)', function (assert) {
+        var btn;
+        assert.expect(4);
+
+        this.elem.formDialog({
+            buttons: {
+                Edit: function () {}
+            }
+        });
+        btn = this.elem.dialog('widget').find('.ui-dialog-buttonpane button');
+        
+        assert.equal(btn.length, 3, 'dialog should have 3 buttons');
+        assert.equal(btn.eq(0).text(), 'Edit', '1st button should be named "Edit"');
+        assert.equal(btn.eq(1).text(), 'Save', '2nd button should be named "Save"');
+        assert.equal(btn.eq(2).text(), 'Cancel', '3rd button should be named "Cancel"');
+    });
+
     QUnit.module('self configuration', {
         beforeEach: function () {
             this.elems = $('#qunit-fixture').children();
@@ -152,20 +169,20 @@
         this.elems.formDialog();
 
         //fd1.dialog('open');
-        assert.equal(fd1.dialog('option', 'appendTo'), fd1.data('appendTo'), 'option should be same as attribute');
+        assert.equal(fd1.dialog('option', 'appendTo'), fd1.data('appendTo'), 'appendTo option should be same as attribute');
         assert.equal(fd1.dialog('widget').parent()[0], $(fd1.data('appendTo'))[0], 'container should match option');
 
-        assert.equal(fd1.dialog('option', 'width'), fd1.data('width'), 'option should be same as attribute');
+        assert.equal(fd1.dialog('option', 'width'), fd1.data('width'), 'width option should be same as attribute');
         assert.close(fd1.dialog('widget').width(), fd1.data('width'), 1, 'width should be 400px');
 
-        assert.equal(fd1.dialog('option', 'maxHeight'), fd1.data('maxHeight'), 'option should be same as attribute');
-        assert.equal(fd1.dialog('option', 'hide'), fd1.data('hide'), 'option should be same as attribute');
+        assert.equal(fd1.dialog('option', 'maxHeight'), fd1.data('maxHeight'), 'maxHeight option should be same as attribute');
+        assert.equal(fd1.dialog('option', 'hide'), fd1.data('hide'), 'hide option should be same as attribute');
         fd1.dialog('close');
 
         fd2.dialog('open');
-        assert.equal(fd2.dialog('option', 'maxWidth'), fd2.data('maxWidth'), 'option should be same as attribute');
-        assert.equal(fd2.dialog('option', 'minHeight'), fd2.data('minHeight'), 'option should be same as attribute');
-        assert.equal(fd2.dialog('option', 'show'), fd2.data('show'), 'option should be same as attribute');
+        assert.equal(fd2.dialog('option', 'maxWidth'), fd2.data('maxWidth'), 'maxWidth option should be same as attribute');
+        assert.equal(fd2.dialog('option', 'minHeight'), fd2.data('minHeight'), 'minHeight option should be same as attribute');
+        assert.equal(fd2.dialog('option', 'show'), fd2.data('show'), 'show option should be same as attribute');
         fd2.dialog('close');
     });
 

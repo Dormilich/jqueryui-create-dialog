@@ -68,6 +68,7 @@
             }
         });
 
+        // safeguard for .buttonise()
         if (!('buttons' in options)) {
             options.buttons = [];
         }
@@ -135,24 +136,14 @@
                 config[key] = $elem.data(key);
             });
 
+            $.extend(config, options);
+
             if (plugin.getForm($elem).length > 0) {
                 config.buttons = $.merge(plugin.buttonise(options.buttons), buttons);
             }
- 
-            $elem.dialog(config, options);
+
+            $elem.dialog(config);
         });
-    };
-
-    $.fn.formDialog.translate = function (language, key) {
-        var dictionary = $.fn.formDialog.dictionary;
-
-        if (!(language in dictionary)) {
-            return key;
-        }
-        if (key in dictionary[language]) {
-            return dictionary[language][key];
-        }
-        return key;
     };
 
     /**
@@ -168,10 +159,6 @@
     };
 
     $.fn.formDialog.buttonise = function (buttons) {
-        if ($.isArray(buttons)) {
-            return buttons;
-        }
-
         return $.map(buttons, function (props, name) {
             return $.isFunction(props) ? {
                 click: props,
@@ -182,6 +169,18 @@
 
     $.fn.formDialog.getForm   = function ($elem) {
         return $elem.find('form').addBack('form');
+    };
+
+    $.fn.formDialog.translate = function (language, key) {
+        var dictionary = $.fn.formDialog.dictionary;
+
+        if (!(language in dictionary)) {
+            return key;
+        }
+        if (key in dictionary[language]) {
+            return dictionary[language][key];
+        }
+        return key;
     };
 
     $.fn.formDialog.dictionary = {
