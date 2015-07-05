@@ -6,11 +6,17 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    banner: [
+      '/*! <%= pkg.title || pkg.name %>',
+      ' * <%= pkg.description %>',
+      ' * ',
+      ' * Version: <%= pkg.version %>',
+      ' * Home: <%= pkg.homepage %>',
+      ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>',
+      ' * ',
+      ' * Licensed under the <%= pkg.license %> license.',
+      ' */\n'
+    ].join('\n'),
     // Task configuration.
     clean: {
       files: ['dist']
@@ -95,6 +101,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'qunit', 'clean', 'concat', 'uglify']);
+  grunt.registerTask('default', ['connect', 'jshint', 'qunit', 'clean', 'concat', 'uglify']);
   grunt.registerTask('test',    ['connect', 'jshint', 'qunit']);
 };
