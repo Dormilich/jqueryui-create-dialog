@@ -68,7 +68,29 @@
 
         this.elem.formDialog({ autoOpen: true });
         assert.close(this.elem.dialog("widget").width(), 500, 1, 'default width should be 500px');
-   });
+    });
+
+    QUnit.module('plugin options');
+
+    //QUnit.test('autoClose', function (assert) {
+        //
+    //});
+
+    QUnit.test('remove', function (assert) {
+        assert.expect(3);
+
+        var num_dialogs = $('.ui-dialog').length;
+
+        var elem = $('<div id="kill-la-kill"/>').formDialog({
+            autoOpen: true,
+            remove: true
+        });
+
+        assert.ok(elem.dialog('isOpen'), 'should be open');
+        elem.dialog('close');
+        assert.strictEqual($('#kill-la-kill').length, 0, 'should be removed');
+        assert.strictEqual($('.ui-dialog').length, num_dialogs, 'should not leave a dialog');
+    });
 
     QUnit.module('buttons', {
         beforeEach: function () {
