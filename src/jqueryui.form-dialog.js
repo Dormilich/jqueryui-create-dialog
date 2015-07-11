@@ -77,6 +77,12 @@
             setting.formData = plugin.formalise;
         }
 
+        if (!('close' in options) && options.remove) {
+            options.close = function () {
+                $(this).dialog('destroy').remove();
+            };
+        }
+
         buttons = [{
             text:  plugin.translate(setting.language, setting.actionLabel),
             click: function (evt) {
@@ -197,7 +203,6 @@
         // modified dialog options:
 
         autoOpen: false,
-        modal: true,
         width: 500,
 
         // plugin options:
@@ -211,7 +216,9 @@
         // form data processing function
         formData: $.fn.formDialog.formalise,
         // alternate/additional success function
-        success: null
+        success: null,
+        // remove after close
+        remove: false
     };
 
 }(jQuery));
