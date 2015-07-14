@@ -13,14 +13,14 @@ In your web page:
 ```html
 <script src="jquery.min.js"></script>
 <script src="jquery-ui.min.js"></script>
-<script src="dist/jqueryui.form-dialog.min.js"></script>
+<script src="jqueryui.form-dialog.min.js"></script>
 ```
 
 ## Documentation
 
     (jQuery) .formDialog( [ (object) options ], [ (function) success ] )
 
-**success**: a function executed when the AJAX request returns successfully. It takes the same parameters as the jQuery AJAX success handler. The scope of the function is the dialog element.
+**success**: a function executed when the AJAX request returns successfully. It takes the same parameters as the jQuery AJAX success handler. The scope of the function is the jQuery dialog element.
 
 **options**: can be any jQueryUI Dialog option. Some of them have different default values to the Dialog widget:
 
@@ -33,7 +33,7 @@ Additionally, there are plugin specific options:
 - _actionLabel_ (string) `"Save"`, the label for the submit button
 - _autoClose_ (boolean) `true`, set to `true` if the dialog should be automatically closed if the AJAX request returns successfully
 - _formData_ (function), a function that converts the form data into a data type (usually an URL encoded string or plain object) that `jQuery.ajax()` can handle. The scope of the function is the DOM form element, the jQuery form element is passed as only parameter. It must return the data for the AJAX request.
-- _success_ (function), additional function or alternative to the **success** parameter. To be executed when the AJAX request returns successfully. The scope of the function is the dialog element.
+- _success_ (function), additional function or alternative to the **success** parameter. To be executed when the AJAX request returns successfully. The scope of the function is the jQuery dialog element.
 - _remove_ (boolean) `false`, if set to `true` it will completely remove the dialog when it is closed. This option may be useful if the dialog’s content is loaded through AJAX and would otherwise accumulate in the DOM. If the Dialog option `close` is already set, this option is ignored.
 
 ## Translating Labels
