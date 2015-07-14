@@ -1,7 +1,7 @@
 {
   "name": "form-dialog",
   "title": "jQueryUI Form Dialog",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Create preconfigured jQueryUI dialog forms.",
   "keywords": [
     "jquery-plugin",
