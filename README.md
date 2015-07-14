@@ -20,12 +20,11 @@ In your web page:
 
     (jQuery) .formDialog( [ (object) options ], [ (function) success ] )
 
-**success** a function executed when the AJAX request returns successfully. It takes the same parameters as the jQuery AJAX success handler. The scope of the function is the dialog element.
+**success**: a function executed when the AJAX request returns successfully. It takes the same parameters as the jQuery AJAX success handler. The scope of the function is the dialog element.
 
-**options** can be any jQueryUI Dialog option. Some of them have different default values to the Dialog widget:
+**options**: can be any jQueryUI Dialog option. Some of them have different default values to the Dialog widget:
 
 - _autoOpen_ `false`
-- _modal_ `true`
 - _width_ `500`
 
 Additionally, there are plugin specific options:
@@ -35,6 +34,7 @@ Additionally, there are plugin specific options:
 - _autoClose_ (boolean) `true`, set to `true` if the dialog should be automatically closed if the AJAX request returns successfully
 - _formData_ (function), a function that converts the form data into a data type (usually an URL encoded string or plain object) that `jQuery.ajax()` can handle. The scope of the function is the DOM form element, the jQuery form element is passed as only parameter. It must return the data for the AJAX request.
 - _success_ (function), additional function or alternative to the **success** parameter. To be executed when the AJAX request returns successfully. The scope of the function is the dialog element.
+- _remove_ (boolean) `false`, if set to `true` it will completely remove the dialog when it is closed. This option may be useful if the dialog’s content is loaded through AJAX and would otherwise accumulate in the DOM. If the Dialog option `close` is already set, this option is ignored.
 
 ## Translating Labels
 
@@ -105,10 +105,12 @@ $('#some-button').on('click', function (evt) {
 
 Alternatively, you can fetch the form element via AJAX.
 ```javascript
-$.get('/path/to/dialog.html', function (html) {
-	$(html).formDialog({ autoOpen: true }, function () {
+$.get('/path/to/dialog.inc.html', function (html) {
+	$(html).formDialog({ 
+		autoOpen: true,
+		remove: true
+	}, function () {
 		alert('Comment saved');
-		// this.remove();
 	});
 })
 ```
@@ -129,9 +131,15 @@ Defining dialog options in the dialog element.
 ```
 Through appropriate data attributes you can pre-set any jQueryUI Dialog option that accepts a primitive value (strings, numbers, booleans). Be aware however that this will be overridden by any option you pass into the plugin.
 
-### Note on URL notations
+## Notes
 
-Given that the page in question is `https://example.com/foo/index.html`, then browsers will make the following modifications automatically.
+### Default form actions
+
+You might add `onsubmit="return false;"` to avoid accidentally submitting the form when pressing the enter key.
+
+### URL notations
+
+Given that the page in question is `https://example.com/foo/index.html`, then browsers will resolve the following URL notations automatically.
 
 - `some/script.php` => `https://example.com/foo/some/script.php`
 - `/some/script.php` => `https://example.com/some/script.php`
