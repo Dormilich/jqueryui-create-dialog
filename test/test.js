@@ -251,6 +251,12 @@
             this.server.respondWith(/\/ajax\/error\/400/, [400, {
                 "Content-Type": "application/json"
             }, '{"error":["operation cancelled"],"form":{"test":["invalid value"]}}']);
+            this.server.respondWith(/\/ajax\/form\/400/, [400, {
+                "Content-Type": "application/json"
+            }, '{"error":["operation cancelled"]}']);
+            this.server.respondWith(/\/ajax\/input\/400/, [400, {
+                "Content-Type": "application/json"
+            }, '{"form":{"test":["invalid value"]}}']);
         },
         afterEach: function () {
             this.server.restore();
@@ -356,7 +362,47 @@
             assert.equal(sibling_name, 'test', 'specific error should be before form field');
 
             element.dialog('close');
+            done();
+        });
 
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
+    });
+
+    QUnit.test('form validation error', function (assert) {
+        var done = assert.async();
+        assert.expect(2);
+
+        var element = $('<form action="/ajax/form/400" method="post"><input name="test"></form>').formDialog();
+
+        $(document).one('ajaxComplete', function () {
+            var errors = element.find('ul.error');
+            assert.strictEqual(errors.length, 1, 'form dialog should have 1 error note');
+            assert.equal(errors.eq(0).text(), 'operation cancelled', 'error should be general');
+
+            element.dialog('close');
+            done();
+        });
+
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
+    });
+
+    QUnit.test('input validation error', function (assert) {
+        var done = assert.async();
+        assert.expect(3);
+
+        var element = $('<form action="/ajax/input/400" method="post"><input name="test"></form>').formDialog();
+
+        $(document).one('ajaxComplete', function () {
+            var errors = element.find('ul.error');
+            assert.strictEqual(errors.length, 1, 'form dialog should have 1 error note');
+            assert.equal(errors.eq(0).text(), 'invalid value', 'error should be specific');
+
+            var sibling_name = errors.eq(0).next().prop('name');
+            assert.equal(sibling_name, 'test', 'specific error should be before form field');
+
+            element.dialog('close');
             done();
         });
 

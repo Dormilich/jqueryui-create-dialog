@@ -13,10 +13,12 @@
     function _showErrors(jqXHR)
     {
         try {
-            var data = $.parseJSON(jqXHR.responseText);
-            $.each(data.form, function (field, errors) {
-                this.find('*[name="'+field+'"]:first').before(_createErrorList(errors));
-            }.bind(this));
+            var data = jqXHR.responseJSON;
+            if (data.form) {
+                $.each(data.form, function (field, errors) {
+                    this.find('*[name="'+field+'"]:first').before(_createErrorList(errors));
+                }.bind(this));
+            }
             if (data.error) {
                 this.find('form').addBack('form').prepend(_createErrorList([data.error]));
             }
