@@ -1,9 +1,9 @@
 /*! jQueryUI Form Dialog
  * Create preconfigured jQueryUI dialog forms.
  * 
- * Version: 0.4.0
+ * Version: 0.5.0
  * Home: https://github.com/Dormilich/jqueryui-form-dialog
- * Copyright (c) 2015 Bertold von Dormilich;
+ * Copyright (c) 2015 Bertold von Dormilich
  * 
  * Licensed under the MIT license.
  */
@@ -22,10 +22,12 @@
     function _showErrors(jqXHR)
     {
         try {
-            var data = $.parseJSON(jqXHR.responseText);
-            $.each(data.form, function (field, errors) {
-                this.find('*[name="'+field+'"]:first').before(_createErrorList(errors));
-            }.bind(this));
+            var data = jqXHR.responseJSON;
+            if (data.form) {
+                $.each(data.form, function (field, errors) {
+                    this.find('*[name="'+field+'"]:first').before(_createErrorList(errors));
+                }.bind(this));
+            }
             if (data.error) {
                 this.find('form').addBack('form').prepend(_createErrorList([data.error]));
             }
@@ -84,6 +86,12 @@
 
         if (!$.isFunction(setting.formData)) {
             setting.formData = plugin.formalise;
+        }
+
+        if (!('close' in options) && options.remove) {
+            options.close = function () {
+                $(this).dialog('destroy').remove();
+            };
         }
 
         buttons = [{
@@ -206,7 +214,6 @@
         // modified dialog options:
 
         autoOpen: false,
-        modal: true,
         width: 500,
 
         // plugin options:
@@ -220,7 +227,9 @@
         // form data processing function
         formData: $.fn.formDialog.formalise,
         // alternate/additional success function
-        success: null
+        success: null,
+        // remove after close
+        remove: false
     };
 
 }(jQuery));
