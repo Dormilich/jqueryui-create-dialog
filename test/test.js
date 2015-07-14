@@ -72,10 +72,6 @@
 
     QUnit.module('plugin options');
 
-    //QUnit.test('autoClose', function (assert) {
-        //
-    //});
-
     QUnit.test('remove', function (assert) {
         assert.expect(3);
 
@@ -284,6 +280,37 @@
         });
         element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
         this.server.respond();
+    });
+
+    QUnit.test('autoClose: true', function (assert) {
+        var done = assert.async();
+        assert.expect(1);
+
+        var element = $('#form-2').formDialog({
+            autoOpen: true,
+            autoClose: true
+        }, function () {
+            assert.notOk(this.dialog('isOpen'), 'should have closed');
+            done();
+        });
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();        
+    });
+
+    QUnit.test('autoClose: false', function (assert) {
+        var done = assert.async();
+        assert.expect(1);
+
+        var element = $('#form-2').formDialog({
+            autoOpen: true,
+            autoClose: false
+        }, function () {
+            assert.ok(this.dialog('isOpen'), 'should stay open');
+            this.dialog('close');
+            done();
+        });
+        element.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();        
     });
 
     QUnit.test('server error', function (assert) {
