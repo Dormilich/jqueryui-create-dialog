@@ -64,7 +64,7 @@ For the validation error handler to kick in successfully, send an **HTTP 400** S
 
 ```json
 {
-	"errors": [
+	"error": [
 		"general form error #1",
 		"general form error #2"
 	],
@@ -79,7 +79,7 @@ For the validation error handler to kick in successfully, send an **HTTP 400** S
 	}
 }
 ```
-Both the "errors" and the "form" keys are optional. If there are messages defined for the "errors" key, the plugin will put an unordered list of all the messages right at the beginning of the form. The messages under the "form" key will be put before the first form element of the same name as the form field key. Even if there is only one error message per key, wrap it into an array.
+Both the "error" and the "form" keys are optional. If there are messages defined for the "error" key, the plugin will put an unordered list of all the messages right at the beginning of the form. The messages under the "form" key will be put before the first form element of the same name as the form field key. Even if there is only one error message per key, wrap it into an array.
 
 ### Server Errors
 
