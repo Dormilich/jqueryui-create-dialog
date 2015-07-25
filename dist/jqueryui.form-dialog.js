@@ -1,7 +1,7 @@
 /*! jQueryUI Form Dialog
  * Create preconfigured jQueryUI dialog forms.
  * 
- * Version: 0.5.0
+ * Version: 0.5.1
  * Home: https://github.com/Dormilich/jqueryui-form-dialog
  * Copyright (c) 2015 Bertold von Dormilich
  * 
@@ -113,15 +113,17 @@
                     type: $form.prop('method'),
                     data: setting.formData.call($form[0], $form),
                     context: $dialog,
-                    statusCode: {
-                        400: _showErrors,
-                        500: function (jqXHR, textStatus, errorThrown) {
-                            this.dialog('close');
-                            _userAlert(plugin.translate(setting.language, 'Error'), jqXHR.responseText || errorThrown);
-                        }
-                    }
+                    statusCode: setting.http
                 }).always(function () {
                     button.disabled = false;
+                }).fail(function (jqXHR) {
+                    if (jqXHR.status in setting.http) {
+                        return;
+                    }
+                    this.dialog('close');
+                    if (jqXHR.responseText) {
+                        _userAlert(plugin.translate(setting.language, 'Error'), jqXHR.responseText);
+                    }
                 });
 
                 if (setting.autoClose) {
@@ -229,7 +231,11 @@
         // alternate/additional success function
         success: null,
         // remove after close
-        remove: false
+        remove: false,
+        // default error handler
+        http: {
+            400: _showErrors
+        }
     };
 
 }(jQuery));
