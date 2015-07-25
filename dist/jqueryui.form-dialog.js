@@ -1,7 +1,7 @@
 /*! jQueryUI Form Dialog
  * Create preconfigured jQueryUI dialog forms.
  * 
- * Version: 0.5.1
+ * Version: 0.6.0
  * Home: https://github.com/Dormilich/jqueryui-form-dialog
  * Copyright (c) 2015 Bertold von Dormilich
  * 
