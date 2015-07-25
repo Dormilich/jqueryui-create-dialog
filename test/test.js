@@ -247,6 +247,10 @@
             this.server.respondWith(/\/ajax\/error\/500/, [500, {
                 "Content-Type": "text/plain"
             }, 'internal server error']);
+            // custom error
+            this.server.respondWith(/\/ajax\/error\/404/, [404, {
+                "Content-Type": "text/plain"
+            }, 'this file does not exist']);
             // validation error
             this.server.respondWith(/\/ajax\/error\/400/, [400, {
                 "Content-Type": "application/json"
@@ -431,6 +435,20 @@
                 done();
             }
         });
+
+        element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
+    });
+
+    QUnit.test('custom error handler', function (assert) {
+        var done = assert.async(),
+            html = '<form action="/ajax/error/404" method="post"><input name="test" value="foo"></form>';
+        assert.expect(1);
+
+        var element = $(html).formDialog({ http: { 404: function (jqXHR) {
+            assert.ok(jqXHR.responseText === 'this file does not exist', 'should receive correct message');
+            done();
+        } } });
 
         element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
         this.server.respond();
