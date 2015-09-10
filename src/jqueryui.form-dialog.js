@@ -131,9 +131,11 @@
                     ajax.done(success);
                 }
 
-                ajax.done(function () {
-                    $form[0].reset();
-                });
+                if (setting.formReset) {
+                    ajax.done(function () {
+                        $form[0].reset();
+                    });
+                }
             }
         }, {
             text:  plugin.translate(setting.language, 'Cancel'),
@@ -223,9 +225,11 @@
         autoClose: true,
         // form data processing function
         formData: $.fn.formDialog.formalise,
+        // reset form after successful submission
+        formReset: true,
         // alternate/additional success function
         success: null,
-        // remove after close
+        // remove dialog after close
         remove: false,
         // default error handler
         http: {
