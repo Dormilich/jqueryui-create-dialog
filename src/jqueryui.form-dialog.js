@@ -130,6 +130,10 @@
                 if ($.isFunction(success)) {
                     ajax.done(success);
                 }
+
+                ajax.done(function () {
+                    $form[0].reset();
+                });
             }
         }, {
             text:  plugin.translate(setting.language, 'Cancel'),
