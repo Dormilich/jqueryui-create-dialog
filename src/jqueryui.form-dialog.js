@@ -123,18 +123,18 @@
                     });
                 }
 
+                if (setting.formReset) {
+                    ajax.done(function () {
+                        $form[0].reset();
+                    });
+                }
+
                 if ($.isFunction(setting.success)) {
                     ajax.done(setting.success);
                 }
 
                 if ($.isFunction(success)) {
                     ajax.done(success);
-                }
-
-                if (setting.formReset) {
-                    ajax.done(function () {
-                        $form[0].reset();
-                    });
                 }
             }
         }, {

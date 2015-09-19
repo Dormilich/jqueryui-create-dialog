@@ -454,4 +454,25 @@
         this.server.respond();
     });
 
+    QUnit.test('auto-reset form on submit', function (assert) {
+        var form, done = assert.async();
+        assert.expect(4);
+
+        form = $('#form-5').formDialog({
+            appendTo: '#qunit-fixture'
+        }, function () {
+            assert.equal($('#form-5-1').val(), '1', 'first field should be reset');
+            assert.equal($('#form-5-2').val(), 'xxx', 'second field should be reset');
+            done();
+        });
+
+        $('#form-5-1').val(20);
+        assert.equal($('#form-5-1').val(), '20', 'first field should be changed');
+        $('#form-5-2').val('yy');
+        assert.equal($('#form-5-2').val(), 'yy', 'second field should be chenged');
+
+        form.dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
+        this.server.respond();
+    });
+
 }(window, document, QUnit, jQuery, window.sinon));
