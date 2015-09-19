@@ -36,6 +36,7 @@ Additionally, there are plugin specific options:
 - _success_ (function), additional function or alternative to the **success** parameter. To be executed when the AJAX request returns successfully. The scope of the function is the jQuery dialog element.
 - _remove_ (boolean) `false`, if set to `true` it will completely remove the dialog when it is closed. This option may be useful if the dialog’s content is loaded through AJAX and would otherwise accumulate in the DOM. If the Dialog option `close` is already set, this option is ignored.
 - _http_ (object), an object consisting of a HTTP status code as key and a JQuery AJAX handler function as value. This object will serve as the _statusCode_ setting of the jQuery AJAX component. By default a HTTP 400 handler is predefined assigning error messages to the form (see below).
+- _formReset_ (boolean) `true`, reset the form to its original state on successful submission.
 
 ## Translating Labels
 
