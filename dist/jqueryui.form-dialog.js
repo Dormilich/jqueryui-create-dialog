@@ -1,7 +1,7 @@
 /*! jQueryUI Form Dialog
  * Create preconfigured jQueryUI dialog forms.
  * 
- * Version: 0.6.0
+ * Version: 0.7.0
  * Home: https://github.com/Dormilich/jqueryui-form-dialog
  * Copyright (c) 2015 Bertold von Dormilich
  * 
@@ -132,6 +132,12 @@
                     });
                 }
 
+                if (setting.formReset) {
+                    ajax.done(function () {
+                        $form[0].reset();
+                    });
+                }
+
                 if ($.isFunction(setting.success)) {
                     ajax.done(setting.success);
                 }
@@ -228,9 +234,11 @@
         autoClose: true,
         // form data processing function
         formData: $.fn.formDialog.formalise,
+        // reset form after successful submission
+        formReset: true,
         // alternate/additional success function
         success: null,
-        // remove after close
+        // remove dialog after close
         remove: false,
         // default error handler
         http: {
