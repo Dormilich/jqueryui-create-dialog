@@ -35,7 +35,7 @@ Additionally, there are plugin specific options:
 - _formData_ (function), a function that converts the form data into a data type (usually an URL encoded string or plain object) that `jQuery.ajax()` can handle. The scope of the function is the DOM form element, the jQuery form element is passed as only parameter. It must return the data for the AJAX request.
 - _success_ (function), additional function or alternative to the **success** parameter. To be executed when the AJAX request returns successfully. The scope of the function is the jQuery dialog element.
 - _remove_ (boolean) `false`, if set to `true` it will completely remove the dialog when it is closed. This option may be useful if the dialog’s content is loaded through AJAX and would otherwise accumulate in the DOM. If the Dialog option `close` is already set, this option is ignored.
-- _http_ (object), an object consisting of a HTTP status code as key and a JQuery AJAX handler function as value. This object will serve as the _statusCode_ setting of the jQuery AJAX component. By default a HTTP 400 handler is predefined assigning error messages to the form (see below).
+- _ajax_ (object), an object defining the jQuery AJAX configuration. By default a HTTP 400 handler is predefined assigning error messages to the form (see below).
 - _formReset_ (boolean) `true`, reset the form to its original state on successful submission.
 
 ## Translating Labels
@@ -142,11 +142,3 @@ Through appropriate data attributes you can pre-set any jQueryUI Dialog option t
 ### Default form actions
 
 You might add `onsubmit="return false;"` to avoid accidentally submitting the form when pressing the enter key.
-
-### URL notations
-
-Given that the page in question is `https://example.com/foo/index.html`, then browsers will resolve the following URL notations automatically.
-
-- `some/script.php` => `https://example.com/foo/some/script.php`
-- `/some/script.php` => `https://example.com/some/script.php`
-- `//some/script.php` => `https://some/script.php`

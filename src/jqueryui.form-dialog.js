@@ -100,15 +100,14 @@
                 button.disabled = true;
                 $dialog.find('ul.error').remove();
 
-                ajax = $.ajax($form.prop('action'), {
+                ajax = $.ajax($form.prop('action'), $.extend({}, setting.ajax, {
                     type: $form.prop('method'),
                     data: setting.formData.call($form[0], $form),
-                    context: $dialog,
-                    statusCode: setting.http
-                }).always(function () {
+                    context: $dialog
+                })).always(function () {
                     button.disabled = false;
                 }).fail(function (jqXHR) {
-                    if (jqXHR.status in setting.http) {
+                    if (jqXHR.status in setting.ajax.statusCode) {
                         return;
                     }
                     this.dialog('close');
@@ -231,9 +230,12 @@
         success: null,
         // remove dialog after close
         remove: false,
-        // default error handler
-        http: {
-            400: _showErrors
+        // options for ajax
+        ajax: {
+            // default error handler
+            statusCode: {
+                400: _showErrors
+            }
         }
     };
 

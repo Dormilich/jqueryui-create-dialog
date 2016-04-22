@@ -445,10 +445,10 @@
             html = '<form action="/ajax/error/404" method="post"><input name="test" value="foo"></form>';
         assert.expect(1);
 
-        var element = $(html).formDialog({ http: { 404: function (jqXHR) {
+        var element = $(html).formDialog({ ajax: { statusCode: { 404: function (jqXHR) {
             assert.ok(jqXHR.responseText === 'this file does not exist', 'should receive correct message');
             done();
-        } } });
+        } } } });
 
         element.dialog('open').dialog('widget').find('.ui-dialog-buttonpane button').eq(0).trigger('click');
         this.server.respond();
